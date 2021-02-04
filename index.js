@@ -123,6 +123,55 @@ app.use((req, res, next) => {
   next()
 })
 
+app.get('/randomDog', async (req, res) => {
+  // Using axios 
+  const axios = require("axios")
+
+  const dogs = await axios.get("https://random.dog/doggos")
+  const dogsLength = dogs.data.length
+
+  const random = between(0, dogsLength)
+  console.log("dogs", random, dogs.data[random])
+
+  const nextDog = dogs.data[random]
+
+  // Using fetch
+  /* const fetch = require("node-fetch")
+
+  let dogs = await fetch("https://random.dog/doggos")
+  dogs = await dogs.json()
+  const dogsLength = dogs.length
+  console.log("dogs", dogs.length)
+
+  const random = between(0, dogsLength)
+  console.log("dogs", random, dogs[random])
+
+  const nextDog = dogs[random]*/
+
+
+  res.send(`
+    <h1> Next dogs is... </h1>
+    <img src="https://random.dog/${nextDog}" />
+
+    <style>
+      body {
+        text-align:center;
+      }
+      img {
+        max-width:100%;
+        max-height:80vh;
+        box-shadow: 1px 1px 0 0 #ffffff inset, 0 2px 3px 0 #B3B3B3;
+      }
+    </style>
+  `)
+})
+
+function between(min, max) {
+  return Math.floor(
+    Math.random() * (max - min + 1) + min
+  )
+}
+
 app.get('/', (req, res) => {
   console.log(req.session)
 
